@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasan Kalyoncu Üniversitesi - İlanlar</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .fixed-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        /* Sidebar style */
+        .sidebar {
+            height: 100vh;
+            width: 250px;
+            background-color: #cb0227;
+            position: fixed;
+            top: 0;
+            left: -250px; /* Hide sidebar initially */
+            transition: left 0.3s ease;
+        }
+
+        .sidebar a {
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+
+        .content {
+            transition: margin-left 0.3s ease;
+        }
+
+        .active {
+            left: 0 !important; /* Show sidebar when active */
+        }
+
+        .sidebar .profile-section {
+            padding: 15px;
+            background-color: #d32f2f;
+            text-align: center;
+        }
+
+        .sidebar .profile-section img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+        }
+
+        .sidebar .profile-section h5 {
+            margin-top: 10px;
+            color: white;
+        }
+
+        .sidebar .profile-section p {
+            color: white;
+            font-size: 14px;
+        }
+
+        .sidebar .logout-btn {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .sidebar .logout-btn a {
+            color: white;
+            background-color: #f44336;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: block;
+        }
+
+        .sidebar .logout-btn a:hover {
+            background-color: #d32f2f;
+        }
+
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+         }
+
+        card-body {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+
+   <!-- Sidebar -->
+   <div id="sidebar" class="sidebar">
+    <div class="profile-section">
+        <!-- Profile Picture -->
+        <img src="resimler/profile.png" alt="Profile Picture">
+        <h5>Hasan Kalyoncu</h5>
+    </div>
+    <a href="kişiselbilgiler.html">Kişisel Bilgiler</a>
+    <a href="üyelik.html">Üyelik</a>
+    
+    <!-- Score -->
+    <div class="p-3">
+        <a href="ayınBirinicis.html" class="text-white">Skor: 1500</a>
+    </div>
+
+    <!-- Log Out Button -->
+    <div class="logout-btn">
+            <a href="loginpage.html">Çıkış Yap</a>
+    </div>
+</div>
+
+
+    <div class="content" id="content">
+        <div class="container-fluid">
+        <div class="row bg-danger text-white py-3">
+            <div class="col-md-6 d-flex align-items-center">
+                 <!-- Menu button to toggle the sidebar -->
+                 <button class="btn btn-outline-light me-3" onclick="toggleSidebar()">&#9776;</button>
+                <input type="text" class="form-control" placeholder="Arama...">
+            </div>
+            <div class="col-md-6 text-end">
+                <a href="main.html" class="text-white text-decoration-none mx-2">Ana Sayfa</a>
+                <a href="ilanlar.html" class="text-white text-decoration-none mx-2">İlanlar</a>
+                <a href="topluluklar.html" class="text-white text-decoration-none mx-2">Topluluklar</a>
+                <a href="blog.html" class="text-white text-decoration-none mx-2">Blog</a>
+                <a href="istatistikler.html" class="text-white text-decoration-none mx-2">İstatistikler</a>
+                <a href="anketler.html" class="text-white text-decoration-none mx-2">Anketler</a>
+            </div>
+        </div>
+
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-3">
+                    <h5>Filtreleme</h5>
+                    <div class="list-group">
+                        <button class="list-group-item list-group-item-action" onclick="filterPosts('egitim')">Eğitim</button>
+                        <button class="list-group-item list-group-item-action" onclick="filterPosts('is')">İş</button>
+                        <button class="list-group-item list-group-item-action" onclick="filterPosts('kayip')">Kayıp</button>
+                        <button class="list-group-item list-group-item-action" onclick="filterPosts('diger')">Diğer</button>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div id="filtered-posts" class="row">
+                        <!-- Filtered posts will be displayed here -->
+                    </div>
+                </div>
+            
+
+            </div>
+        </div>
+
+        <div class="container mt-4" id="addIlanForm">
+            <div class="card">
+                <div class="card-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="ilanType" class="form-label">İlan Türü</label>
+                            <select class="form-select" id="ilanType" required>
+                                <option value="egitim">Eğitim</option>
+                                <option value="is">İş</option>
+                                <option value="kayip">Kayıp</option>
+                                <option value="diger">Diğer</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ilanTitle" class="form-label">Başlık</label>
+                            <input type="text" class="form-control" id="ilanTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ilanDescription" class="form-label">Açıklama</label>
+                            <textarea class="form-control" id="ilanDescription" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ilanImage" class="form-label">Resim URL</label>
+                            <input type="url" class="form-control" id="ilanImage" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Ekle</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="fixed-button">
+            <button class="btn btn-success" onclick="toggleIlanForm()">Yeni İlan Ekle</button>
+        </div>
+
+        <script>
+            function toggleIlanForm() {
+                const ilanForm = document.getElementById('addIlanForm');
+                ilanForm.style.display = ilanForm.style.display === 'none' ? 'block' : 'none';
+            }
+
+            // Initially hide the form
+            document.getElementById('addIlanForm').style.display = 'none';
+        </script>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Function to toggle sidebar visibility
+        function toggleSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var content = document.getElementById('content');
+            
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-250px'; // Hide sidebar
+                content.style.marginLeft = '0'; // Reset content margin
+            } else {
+                sidebar.style.left = '0'; // Show sidebar
+                content.style.marginLeft = '250px'; // Push content to the right
+            }
+        }
+
+        // Call filterPosts with a default type when the page loads
+        window.onload = function() {
+            filterPosts('egitim');
+        };
+    </script>
+</body>
+<footer class="bg-dark text-white py-4">
+    <div class="container">
+        <div class="row">
+            <!-- Hakkımızda Bölümü -->
+            <div class="col-md-4">
+                <h5>Hakkımızda</h5>
+                <p>
+                    Hasan Kalyoncu Üniversitesi, eğitimde mükemmelliği hedefleyen, yenilikçiliği teşvik eden ve daha parlak bir gelecek inşa eden bir üniversitedir.
+                </p>
+            </div>
+
+            <!-- Hızlı Erişim -->
+            <div class="col-md-4">
+                <h5>Hızlı Erişim</h5>
+                <ul class="list-unstyled">
+                    <li><a href="main.html" class="text-white text-decoration-none">Ana Sayfa</a></li>
+                    <li><a href="ilanlar.html" class="text-white text-decoration-none">İlanlar</a></li>
+                    <li><a href="topluluklar.html" class="text-white text-decoration-none">Topluluklar</a></li>
+                    <li><a href="blog.html" class="text-white text-decoration-none">Blog</a></li>
+                    <li><a href="istatistikler.html" class="text-white text-decoration-none">İstatistikler</a></li>
+                </ul>
+            </div>
+
+            <!-- Sosyal Medya -->
+            <div class="col-md-4 text-center">
+                <h5>Bizi Takip Edin</h5>
+                <a href="https://facebook.com" target="_blank" class="text-white mx-2">
+                    <i class="fab fa-facebook fa-lg"></i>
+                </a>
+                <a href="https://twitter.com" target="_blank" class="text-white mx-2">
+                    <i class="fab fa-twitter fa-lg"></i>
+                </a>
+                <a href="https://instagram.com" target="_blank" class="text-white mx-2">
+                    <i class="fab fa-instagram fa-lg"></i>
+                </a>
+                <a href="https://linkedin.com" target="_blank" class="text-white mx-2">
+                    <i class="fab fa-linkedin fa-lg"></i>
+                </a>
+            </div>
+        </div>
+
+        <hr class="bg-light my-3">
+        <div class="text-center">
+            <p class="mb-0">&copy; 2024 Hasan Kalyoncu Üniversitesi. Tüm hakları saklıdır.</p>
+        </div>
+    </div>
+</footer>
+</html>
+
+
+<script>
+    const ilanlar = [
+        {type: 'egitim', title: 'Kodlama Kursu', description: 'İleri seviye c# dersleri.', image: 'resimler/c-sharp-dersleri.jpg' },
+        { type: 'egitim', title: 'Matematik Kursu', description: 'İleri seviye matematik kursu.', image: 'resimler/mat.jpeg' },
+        { type: 'egitim', title: 'İngilizce Kursu', description: 'Başlangıç seviye İngilizce kursu.', image: 'resimler/ing.jpg' },
+        { type: 'egitim', title: 'Fizik Semineri', description: 'Ünlü fizikçilerden seminer.', image: 'resimler/fizik.jpeg' },
+        { type: 'egitim', title: 'Çizim Kursu', description: 'Başlangıç seviye çizim kursu.', image: 'resimler/çizim.jpg' },
+        
+        { type: 'is', title: 'Yazılım Mühendisi', description: 'Tecrübeli yazılım mühendisi aranıyor.', image: 'resimler/yazilimm.jpg' },
+        { type: 'is', title: 'Mimarlık', description: 'Deneyimli mimar aranıyor.', image: 'resimler/kg_mimarlık.jpg' },
+        { type: 'is', title: 'Proje Yöneticisi', description: 'Deneyimli proje yöneticisi aranıyor.', image: 'resimler/proje.jpeg' },
+        { type: 'is', title: 'Grafik Tasarımcı', description: 'Yaratıcı grafik tasarımcı aranıyor.', image: 'resimler/grafik.jpeg' },
+        { type: 'is', title: 'Makine Mühendisi', description: 'Deneyimli makine  mühendisi aranıyor.', image: 'resimler/roket.jpeg' },
+
+        { type: 'kayip', title: 'Kayıp Cüzdan', description: 'Siyah deri cüzdan kayboldu.', image: 'resimler/cuzdan.jpg' },
+        { type: 'kayip', title: 'Kayıp Anahtar', description: 'Araba anahtarı kayboldu.', image: 'resimler/anahtar.jpg' },
+        { type: 'kayip', title: 'Kayıp Telefon', description: 'Samsung kayboldu.', image: 'resimler/telefon.jpg' },
+
+        { type: 'diger', title: 'Satılık Bisiklet', description: 'Az kullanılmış bisiklet satılıktır.', image: 'resimler/bisiklet.jpg' },
+        { type: 'diger', title: 'Kiralık Daire', description: 'Merkezde kiralık daireme ev arkadaşı arıyorum.', image: 'resimler/satilik.jpg' },
+        { type: 'diger', title: 'İkinci El Kitaplar', description: '2. sınıf mühendislik kitapları uygun fiyat.', image: 'resimler/kitap.jpg' }
+    ];
+
+    function filterPosts(type) {
+        const filteredPostsContainer = document.getElementById('filtered-posts');
+        filteredPostsContainer.innerHTML = '';
+
+        const filteredIlanlar = ilanlar.filter(ilan => ilan.type === type);
+
+        filteredIlanlar.forEach(ilan => {
+            const ilanDiv = document.createElement('div');
+            ilanDiv.className = 'col-md-4 mb-4';
+
+            const ilanCard = document.createElement('div');
+            ilanCard.className = 'card h-100';
+
+            const ilanImage = document.createElement('img');
+            ilanImage.src = ilan.image;
+            ilanImage.className = 'card-img-top';
+            ilanImage.alt = ilan.title;
+
+            const ilanBody = document.createElement('div');
+            ilanBody.className = 'card-body';
+
+            const ilanTitle = document.createElement('h5');
+            ilanTitle.className = 'card-title';
+            ilanTitle.innerText = ilan.title;
+
+            const ilanDescription = document.createElement('p');
+            ilanDescription.className = 'card-text';
+            ilanDescription.innerText = ilan.description;
+
+            ilanBody.appendChild(ilanTitle);
+            ilanBody.appendChild(ilanDescription);
+            ilanCard.appendChild(ilanImage);
+            ilanCard.appendChild(ilanBody);
+            ilanDiv.appendChild(ilanCard);
+            filteredPostsContainer.appendChild(ilanDiv);
+        });
+    }
+</script>
+
+<script>
+    document.getElementById('addIlanForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const type = document.getElementById('ilanType').value;
+        const title = document.getElementById('ilanTitle').value;
+        const description = document.getElementById('ilanDescription').value;
+        const image = document.getElementById('ilanImage').value;
+
+        const newIlan = { type, title, description, image };
+        ilanlar.push(newIlan);
+
+        filterPosts(type);
+
+        // Clear the form
+        document.getElementById('addIlanForm').reset();
+    });
+</script>

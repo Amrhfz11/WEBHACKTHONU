@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasan Kalyoncu Üniversitesi - Giriş</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: url('resimler/gecekampus.jpg') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 300px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .login-container img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .login-container h1 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #004E8D;
+        }
+
+        .login-container input {
+            width: calc(100% - 60px);
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .login-container button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .login-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .login-container a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .social-icons {
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            margin: 0 10px;
+            color: black;
+            font-size: 20px;
+            text-decoration: none;
+        }
+                
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <img src="resimler/logo.jpg" alt="Hasan Kalyoncu Üniversitesi Logosu">
+        <h1>Öğrenci Girişi</h1>
+        <input id="username" type="text" placeholder="Kullanıcı Adı">
+        <input id="password" type="password" placeholder="Şifre">
+        <button onclick="login()">Giriş</button>
+        <br>
+        <p style="align-items: center; justify-content: center;"><a href="#">Şifremi Unuttum</a> | <a href="#">Misafir Girişi</a></p>
+        <div class="social-icons">
+            <a href="#"><i class="fa fa-facebook"></i></a>
+            <a href="#"><i class="fa fa-instagram"></i></a>
+            <a href="#"><i class="fa fa-twitter"></i></a>
+        </div>
+    </div>
+<!-- Include Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+<script>
+    // Your Firebase configuration
+    const firebaseConfig = {
+    apiKey: "AIzaSyDG8EwlS3xkDHbK_ORNUDXZdvEO30LSZ04",
+    authDomain: "kampus-hku.firebaseapp.com",
+    projectId: "kampus-hku",
+    storageBucket: "kampus-hku.firebasestorage.app",
+    messagingSenderId: "820860947150",
+    appId: "1:820860947150:web:4da2b5f1c6cb27a318de9f",
+    measurementId: "G-ZWXPNG8RJV"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    function login() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        firebase.auth().signInWithEmailAndPassword(username, password)
+            .then((userCredential) => {
+                // Signed in
+                const user = userCredential.user;
+                console.log(user);
+                window.location.href = "main.html";
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.error(error);
+                alert('Giriş başarısız. Lütfen kullanıcı adı ve şifrenizi kontrol edin.');
+            });
+    }
+</script>
+</body>
+</html>

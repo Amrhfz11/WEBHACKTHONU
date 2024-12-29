@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasan Kalyoncu Üniversitesi - Blog</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        /* Sidebar style */
+        .sidebar {
+            height: 100vh;
+            width: 250px;
+            background-color: #cb0227;
+            position: fixed;
+            top: 0;
+            left: -250px; /* Hide sidebar initially */
+            transition: left 0.3s ease;
+        }
+
+        .sidebar a {
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+
+        .content {
+            transition: margin-left 0.3s ease;
+        }
+
+        .active {
+            left: 0 !important; /* Show sidebar when active */
+        }
+
+        .sidebar .profile-section {
+            padding: 15px;
+            background-color: #d32f2f;
+            text-align: center;
+        }
+
+        .sidebar .profile-section img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+        }
+
+        .sidebar .profile-section h5 {
+            margin-top: 10px;
+            color: white;
+        }
+
+        .sidebar .profile-section p {
+            color: white;
+            font-size: 14px;
+        }
+
+        .sidebar .logout-btn {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .sidebar .logout-btn a {
+            color: white;
+            background-color: #f44336;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: block;
+        }
+
+        .sidebar .logout-btn a:hover {
+            background-color: #d32f2f;
+        }
+
+        /* Blog post preview style */
+        .blog-post-preview {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .fade-in {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
+        #add-blog-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .like-btn {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .like-btn button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            padding: 5px 10px;
+            border: none;
+            background: none;
+            color: red;
+            transition: transform 0.3s ease;
+        }
+
+        .like-btn button:hover {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div id="sidebar" class="sidebar">
+    <div class="profile-section">
+        <!-- Profile Picture -->
+        <img src="resimler/profile.png" alt="Profile Picture">
+        <h5>Hasan Kalyoncu</h5>
+    </div>
+    <a href="kişiselbilgiler.html">Kişisel Bilgiler</a>
+    <a href="üyelik.html">Üyelik</a>
+
+    <!-- Score -->
+    <div class="p-3">
+        <a href="ayınBirinicis.html" class="text-white">Skor: 1500</a>
+    </div>
+
+    <!-- Log Out Button -->
+    <div class="logout-btn">
+        <a href="#">Çıkış Yap</a>
+    </div>
+</div>
+
+<div class="content" id="content">
+    <div class="container-fluid">
+        <div class="row bg-danger text-white py-3">
+            <div class="col-md-6 d-flex align-items-center">
+                <!-- Menu button to toggle the sidebar -->
+                <button class="btn btn-outline-light me-3" onclick="toggleSidebar()">&#9776;</button>
+                <input type="text" class="form-control" placeholder="Arama...">
+            </div>
+            <div class="col-md-6 text-end">
+                <a href="main.html" class="text-white text-decoration-none mx-2">Ana Sayfa</a>
+                <a href="ilanlar.html" class="text-white text-decoration-none mx-2">İlanlar</a>
+                <a href="topluluklar.html" class="text-white text-decoration-none mx-2">Topluluklar</a>
+                <a href="blog.html" class="text-white text-decoration-none mx-2">Blog</a>
+                <a href="istatistikler.html" class="text-white text-decoration-none mx-2">İstatistikler</a>
+                <a href="anketler.html" class="text-white text-decoration-none mx-2">Anketler</a>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="bg-white p-3 rounded shadow">
+                    <h2>Blog</h2>
+                    <div id="blog-posts" class="row">
+                        <!-- Blog posts will be inserted here dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Button to add new blog post -->
+    <button class="btn btn-success" id="add-blog-btn" onclick="showAddBlogModal()">Add Blog</button>
+
+    <!-- Modal for adding new blog post -->
+    <div class="modal fade" id="addBlogModal" tabindex="-1" aria-labelledby="addBlogModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addBlogModalLabel">Add New Blog Post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addBlogForm">
+                        <div class="mb-3">
+                            <label for="blogTitle" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="blogTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="blogContent" class="form-label">Content</label>
+                            <textarea class="form-control" id="blogContent" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="blogFullContent" class="form-label">Full Content</label>
+                            <textarea class="form-control" id="blogFullContent" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Blog</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Sample blog posts data
+    const blogPosts = [
+        {
+            id: 1,
+            title: "Blog Post 1",
+            content: "### Hackathon Deneyimi: Hayatımın En Öğretici Anı Geçtiğimiz hafta sonu üniversitemizin düzenlediği *Hackathon* etkinliğine katılma fırsatı buldum. ",
+            fullContent: "Bu etkinlik, teknik becerilerimi geliştirmekle kalmayıp, takım çalışması ve yaratıcı problem çözme konularında da kendimi sınamamı sağladı. Hayatımın en öğretici ve keyifli deneyimlerinden biri olarak hafızama kazındı.#### İlk Gün: Heyecan ve HazırlıkHackathon sabahı, etkinlik alanına geldiğimde içimde bir karışım heyecan ve belirsizlik vardı. Takım arkadaşlarım Ayşe ve Mehmet ile buluştuk ve proje fikrimizi tartışmaya başladık. Hedefimiz, kampüs hayatını kolaylaştıracak bir mobil uygulama geliştirmekti. *Zaman yönetimi* konusunda hepimizin dikkatli olması gerekiyordu çünkü sadece 48 saatimiz vardı!Ayşe tasarıma odaklanırken, Mehmet backend geliştirme kısmını üstlendi. Ben ise hem proje koordinasyonu hem de frontend kodlama işlerini yönettim. Herkesin birbirini desteklediği bir ortam oluşturduk ve kısa sürede güzel bir sinerji yakaladık.#### İkinci Gün: Sorunlar ve Çözümlerİkinci gün, işler biraz karmaşıklaştı. Backend ile frontend arasında bağlantı kurarken birkaç teknik sorun yaşadık. Mehmet ile saatlerce hata ayıklamaya çalıştık, ama sonunda çözümü bulmayı başardık. Bu süreç, sabrın ve takım çalışmasının önemini bir kez daha anlamamı sağladı.Bu arada Ayşe, kullanıcı arayüzünde inanılmaz bir iş çıkardı. Modern ve kullanıcı dostu bir tasarım ortaya koyarak projemize çok büyük katkıda bulundu. Bir yandan kod yazarken bir yandan da kahve molaları ile birbirimize moral vermeyi unutmadık.#### Jüri Sunumu ve SonuçlarProjemizi tamamladıktan sonra sıra jüriye sunum yapmaya geldi.",
+            likes: Math.floor(Math.random() * 100)
+        },
+        {
+            id: 2,
+            title: "Blog Post 2",
+            content: "Kampüste Beklenmedik Bir Kriz: Hep Birlikte Aştık Geçtiğimiz hafta Hasan Kalyoncu Üniversitesi kampüsünde hiç beklemediğimiz bir durumla karşılaştık. ",
+            fullContent: "Kampüste Beklenmedik Bir Kriz: Hep Birlikte Aştık Geçtiğimiz hafta Hasan Kalyoncu Üniversitesi kampüsünde hiç beklemediğimiz bir durumla karşılaştık. Öğle saatlerinde başlayan yoğun yağmur, kampüsün bazı noktalarında su baskınlarına yol açtı ve birçok öğrenci bu durumdan olumsuz etkilendi. Ancak bu kriz, biz öğrencilerin nasıl bir dayanışma ve çözüm odaklı hareket edebildiğini de gözler önüne serdi.Krizin İlk Anları: Panik ve SorunlarYağmur aniden şiddetlenmeye başladığında, birçok öğrenci yemekhanede öğle yemeğindeydi. Kampüs yollarında oluşan su birikintileri, yemekhaneye ve kütüphaneye giden yolları kapattı. Özellikle ders çıkışı hareketliliği sırasında, bazı öğrenciler sular içinde mahsur kaldı. Telefonlarımızdan gelen bildirimler, yaşanan durumu daha hızlı öğrenmemizi sağladı. Ancak panik havası çok uzun sürmedi, çünkü herkes yardım etmeye hazırdı.Öğrencilerin Dayanışması: Birlikte Çözüm ArayışıDurumu fark eden öğrenci toplulukları hemen harekete geçti. Yazılım topluluğumuz, sosyal medya üzerinden bir duyuru yaparak öğrencilere güvenli alanlarda kalmalarını ve su baskını olan bölgelere gitmemelerini önerdi. Diğer taraftan, Mühendislik Fakültesi öğrencileri, su baskınını önlemek için yolların üzerine kum torbaları koymaya başladılar.Ayrıca, gönüllü öğrenciler öğrenci işleri ofisiyle iletişime geçerek, kampüste mahsur kalan arkadaşlarımıza ulaşılmasını sağladı. Kimileri, su baskınından etkilenmeyen yerlerde sıcak içecek ve yiyecek dağıtarak moral desteği verdi. Bu sırada üniversitenin teknik ekipleri de drenaj sistemlerini hızlıca kontrol etmeye başladı.Krizin Yönetimi: Ortak ÇözümRektörlük tarafından yapılan açıklama ile dersler geçici olarak durduruldu ve öğrencilerin güvenliği öncelik olarak belirlendi. Kampüs içinde mobil servis araçları kullanılarak, öğrencilerin güvenli noktalara ulaştırılması sağlandı. O gün hepimiz, bir krizin ne kadar hızlı çözülebileceğini gördük.s",
+            likes: Math.floor(Math.random() * 100)
+        },
+        {
+            id: 3,
+            title: "Blog Post 3",
+            content: "Geçtiğimiz hafta Hasan Kalyoncu Üniversitesi kampüsünde oldukça sıra dışı bir olay yaşandı. ",
+            fullContent: "Sabah saatlerinde başlayan elektrik kesintisi, kısa sürede kampüs genelinde birçok sistemin devre dışı kalmasına neden oldu. Dersler sırasında akıllı tahtalar çalışmazken, kütüphanede öğrenciler bilgisayarlarını kullanamadı. Yemekhane ve kafeteryalarda ise ödeme sistemleri aksadı, bu da öğrencilerin yiyecek ve içecek ihtiyaçlarını karşılamasını zorlaştırdı. İlk anlarda yaşanan şaşkınlık ve belirsizlik, kısa sürede yerini çözüm odaklı bir yaklaşıma bıraktı.Öğrenciler, durumu birlikte atlatmak için hızla organize oldu. Cep telefonlarının şarjları kritik bir sorun haline gelmişti. Bazı öğrenciler, taşınabilir şarj cihazlarını paylaşarak bu sorunu hafifletmeye çalıştı. Kampüste düzenlenen öğrenci toplulukları, sosyal medya hesaplarından duyurular yaparak sakin ve dayanışma içinde olunması gerektiğini vurguladı. Hatta bazı öğrenciler, yanlarında getirdikleri küçük jeneratörlerle ortak alanlarda telefon ve laptop şarjı için geçici çözümler ürettiler.Bu süreçte en dikkat çekici olan şey, öğrenciler arasında oluşan dayanışma ruhuydu. Yemekhanede ödeme sistemlerinin devre dışı kalması nedeniyle, gönüllü öğrenciler ücretsiz yemek dağıtımına yardımcı oldu. Teknik sorunların çözümü için mühendislik öğrencileri ve teknik ekip birlikte çalıştı. Ayrıca, sosyal medya üzerinden yapılan çağrılarla, şarj cihazı ve diğer ihtiyaçlar için hızlı bir paylaşım ağı oluşturuldu.Kesinti yaklaşık altı saat sürdü ve bu süre zarfında üniversitenin yönetimi durumu kontrol altına almak için büyük çaba gösterdi. Elektrik kesintisi sona erdiğinde, herkesin yüzünde bir rahatlama ve hafif bir gülümseme vardı. Zorlu bir günü geride bırakmış olmanın verdiği tatmin duygusu, belki de en değerli kazanımımızdı. Bu olay, hepimize kriz anlarında dayanışmanın ve ortak çabanın ne kadar önemli olduğunu bir kez daha gösterdi. Üniversite hayatının bu tür beklenmedik anları, yıllar sonra hatırlanacak güzel anılara dönüşüyor.",
+            likes: Math.floor(Math.random() * 100)
+        },
+        {
+            id: 4,
+            title: "Blog Post 4",
+            content: "Geçtiğimiz günlerde Hasan Kalyoncu Üniversitesi kampüsünde yürüyüş yaparken, birkaç sevimli sokak köpeği ve kediyle karşılaştım. Bahar aylarının canlılığıyla birlikte kampüs, doğanın huzurunu yansıtan bir ortam haline gelmişti. Ancak o gün, sadece bir yürüyüş değil, hayvanların kampüs hayatımıza nasıl değer kattığını fark ettiğim bir deneyime dönüştü.",
+            fullContent: "Sokak hayvanları, kampüsün bir parçası olmuş durumda. Çoğu öğrenci, bu dostlarımızı günlük rutinlerinin doğal bir parçası olarak görüyor. Kimisi, ders aralarında yanlarına gidip onları seviyor; kimisi ise yanlarında mama ve su bulundurarak küçük bir iyilik yapıyor. Örneğin, geçtiğimiz hafta kütüphane önünde otururken bir öğrencinin, yanında getirdiği su ve mamayı bir sokak köpeğiyle paylaştığını gördüm. Bu an, hayvanlarla kurulan bağın ne kadar özel olduğunu bir kez daha hatırlattı.Hayvanların varlığı, kampüs ortamına inanılmaz bir sıcaklık katıyor. Sabahları derslere giderken minik bir kedinin size merakla bakması ya da öğle yemeği sırasında bir köpeğin size eşlik etmesi, monoton günlerinize bir parça mutluluk ekliyor. Ayrıca, birçok öğrenci için bu hayvanlar, evden uzakta geçirilen üniversite yıllarında bir nevi aile sıcaklığı sağlıyor. Evde bırakılan kediler ve köpeklerin yerini kampüsteki bu dostlarımız alıyor gibi.Üniversitenin hayvan dostu politikaları da dikkat çekici. Kampüs çevresinde belli noktalara yerleştirilen mama ve su kapları, hayvanların temel ihtiyaçlarını karşılamada büyük rol oynuyor. Ayrıca, hayvanların sağlığıyla ilgili sorunlar olduğunda, gönüllü öğrenciler ve veteriner hekimler iş birliği yaparak gerekli müdahaleleri gerçekleştiriyor. Bu tür girişimler, üniversite yönetiminin hayvanlara olan duyarlılığını gösteriyor.",
+            likes: Math.floor(Math.random() * 100)
+        }
+    ];
+
+    // Function to display blog posts in preview mode
+    function displayBlogPosts() {
+        const blogPostsContainer = document.getElementById('blog-posts');
+        blogPostsContainer.innerHTML = '';
+
+        blogPosts.forEach((post, index) => {
+            const postElement = document.createElement('div');
+            postElement.className = 'col-md-4 blog-post-preview';
+            postElement.innerHTML = `
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">${post.title}</h5>
+                        <p class="card-text">${post.content}</p>
+                        <button class="btn btn-primary" onclick="openBlogPost(${post.id})">Read More</button>
+                        <div class="like-btn mt-3" onclick="incrementLikes(${post.id})">
+                            <button class="btn btn-outline-danger like-btn" style="border-radius: 50%;">
+                                ❤ <span id="likes-${post.id}">${post.likes}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            blogPostsContainer.appendChild(postElement);
+
+            // Add animation class with delay
+            setTimeout(() => {
+                postElement.classList.add('fade-in');
+            }, index * 100); // Stagger the animation by 100ms for each post
+        });
+    }
+
+    // Function to open a specific blog post
+    function openBlogPost(postId) {
+        const post = blogPosts.find(p => p.id === postId);
+        if (post) {
+            const blogPostsContainer = document.getElementById('blog-posts');
+            blogPostsContainer.innerHTML = `
+                <h2>${post.title}</h2>
+                <p>${post.fullContent}</p>
+                <button class="btn btn-secondary" onclick="displayBlogPosts()">Back to Blog</button>
+            `;
+        }
+    }
+
+    // Function to increment likes for a blog post
+    function incrementLikes(postId) {
+        const post = blogPosts.find(p => p.id === postId);
+        if (post) {
+            post.likes++;
+            document.getElementById(`likes-${post.id}`).innerText = post.likes;
+        }
+    }
+
+    // Display blog posts on page load
+    document.addEventListener('DOMContentLoaded', displayBlogPosts);
+</script>
+
+<script>
+    // Function to toggle sidebar visibility
+    function toggleSidebar() {
+        var sidebar = document.getElementById('sidebar');
+        var content = document.getElementById('content');
+
+        if (sidebar.style.left === '0px') {
+            sidebar.style.left = '-250px'; // Hide sidebar
+            content.style.marginLeft = '0'; // Reset content margin
+        } else {
+            sidebar.style.left = '0'; // Show sidebar
+            content.style.marginLeft = '250px'; // Push content to the right
+        }
+    }
+</script>
+<script>
+    // Function to show the add blog modal
+    function showAddBlogModal() {
+        var addBlogModal = new bootstrap.Modal(document.getElementById('addBlogModal'));
+        addBlogModal.show();
+    }
+
+    // Function to handle form submission and add new blog post
+    document.getElementById('addBlogForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const title = document.getElementById('blogTitle').value;
+        const content = document.getElementById('blogContent').value;
+        const fullContent = document.getElementById('blogFullContent').value;
+
+        const newPost = {
+            id: blogPosts.length + 1,
+            title: title,
+            content: content,
+            fullContent: fullContent,
+            likes: Math.floor(Math.random() * 100)
+        };
+
+        blogPosts.push(newPost);
+        displayBlogPosts();
+
+        var addBlogModal = bootstrap.Modal.getInstance(document.getElementById('addBlogModal'));
+        addBlogModal.hide();
+    });
+</script>
+</body>
+</html>

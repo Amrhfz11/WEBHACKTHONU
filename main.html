@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasan Kalyoncu Üniversitesi - Ana Sayfa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Sidebar style */
+        .sidebar {
+            height: 100vh;
+            width: 250px;
+            background-color: #cb0227;
+            position: fixed;
+            top: 0;
+            left: -250px; /* Hide sidebar initially */
+            transition: left 0.3s ease;
+        }
+
+        .sidebar a {
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+
+        .content {
+            
+            transition: margin-left 0.3s ease;
+        }
+
+        .active {
+            left: 0 !important; /* Show sidebar when active */
+        }
+
+        .sidebar .profile-section {
+            padding: 15px;
+            background-color: #d32f2f;
+            text-align: center;
+        }
+
+        .sidebar .profile-section img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+        }
+
+        .sidebar .profile-section h5 {
+            margin-top: 10px;
+            color: white;
+        }
+
+        .sidebar .profile-section p {
+            color: white;
+            font-size: 14px;
+        }
+
+        .sidebar .logout-btn {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .sidebar .logout-btn a {
+            color: white;
+            background-color: #f44336;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: block;
+        }
+
+        .sidebar .logout-btn a:hover {
+            background-color: #d32f2f;
+        }
+
+         /* Top Scorers Section Styling */
+      .top-scorers {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+      }
+
+      .top-scorers h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+
+      .top-scorers .scorer-card {
+        background-color: #ffffff;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+      }
+
+      .top-scorers .scorer-card .rank {
+        background-color: #cb0227;
+        color: white;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
+        margin-right: 20px;
+      }
+
+      .top-scorers .scorer-card .details {
+        flex-grow: 1;
+      }
+
+      .top-scorers .scorer-card .details h4 {
+        margin: 0;
+        font-size: 18px;
+      }
+
+      .top-scorers .scorer-card .details p {
+        margin: 5px 0;
+        color: #6c757d;
+      }
+
+      .top-scorers .scorer-card .score {
+        font-size: 20px;
+        font-weight: bold;
+        color: #28a745;
+      }
+
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <div class="profile-section">
+            <!-- Profile Picture -->
+            <img src="resimler/profile.png" alt="Profile Picture">
+            <h5>Hasan Kalyoncu</h5>
+        </div>
+        <a href="kişiselbilgiler.html">Kişisel Bilgiler</a>
+        <a href="üyelik.html">Üyelik</a>
+        
+        <!-- Score -->
+        <div class="p-3">
+            <a href="ayınBirinicis.html" class="text-white">Skor: 1500</a>
+        </div>
+
+        <!-- Log Out Button -->
+        <div class="logout-btn">
+            <a href="loginpage.html">Çıkış Yap</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content" id="content">
+        <div class="container-fluid">
+            <div class="row bg-danger text-white py-3">
+                <div class="col-md-6 d-flex align-items-center">
+                    <!-- Menu button to toggle the sidebar -->
+                    <button class="btn btn-outline-light me-3" onclick="toggleSidebar()">&#9776;</button>
+                    <input type="text" class="form-control" placeholder="Arama...">
+                </div>
+                <div class="col-md-6 text-end">
+                    <a href="main.html" class="text-white text-decoration-none mx-2">Ana Sayfa</a>
+                    <a href="ilanlar.html" class="text-white text-decoration-none mx-2">İlanlar</a>
+                    <a href="topluluklar.html" class="text-white text-decoration-none mx-2">Topluluklar</a>
+                    <a href="blog.html" class="text-white text-decoration-none mx-2">Blog</a>
+                    <a href="istatistikler.html" class="text-white text-decoration-none mx-2">İstatistikler</a>
+                    <a href="anketler.html" class="text-white text-decoration-none mx-2">Anketler</a>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="bg-white p-3 rounded shadow">
+                        <h2>Duyurular</h2>
+                        <div class="border-bottom py-2">
+                            <p>"Kariyer Günleri 2023" etkinliği 12 Ocak'ta düzenlenecektir. Tüm öğrenciler davetlidir.</p>
+                            <a
+                            href="https://forms.gle/U8y8hsrwPTESpFf9A"
+                            target="_blank"
+                            class="btn btn-primary mb-2"
+                            >Başvuru Yap</a>
+                          
+                        </div>
+                        <div class="border-bottom py-2">
+                            <p>Hasan Kalyoncu Üniversitesi bahar dönemi kayıt yenileme işlemleri başlamıştır.</p>
+                            <a
+                            href="https://forms.gle/U8y8hsrwPTESpFf9A"
+                            target="_blank"
+                            class="btn btn-primary mb-2"
+                            >Başvuru Yap</a>
+                          
+                        </div>
+                        <div class="py-2">
+                            <p>"Teknoloji ve Gelecek" konulu seminer 20 Şubat'ta gerçekleştirilecektir.</p>
+                            <a
+                            href="https://forms.gle/U8y8hsrwPTESpFf9A"
+                            target="_blank"
+                            class="btn btn-primary mb-2"
+                            >Başvuru Yap</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="d-flex flex-wrap gap-3">
+                        <div class="bg-white rounded shadow" style="width: 48%; height: 200px;">
+                            <img src="resimler/resim1.jpg" alt="Etkinlik 1" class="img-fluid w-100 h-100 rounded">
+                        </div>
+                        <div class="bg-white rounded shadow" style="width: 48%; height: 200px;">
+                            <img src="resimler/resim2.jpg" alt="Etkinlik 2" class="img-fluid w-100 h-100 rounded">
+                        </div>
+                        <div class="bg-white rounded shadow" style="width: 48%; height: 200px;">
+                            <img src="resimler/resim3.jpg" alt="Etkinlik 3" class="img-fluid w-100 h-100 rounded">
+                        </div>
+                        <div class="bg-white rounded shadow" style="width: 48%; height: 200px;">
+                            <img src="resimler/resim4.jpg" alt="Etkinlik 4" class="img-fluid w-100 h-100 rounded">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-8">
+        <!-- Ayın Birincileri Section -->
+        <div class="row mt-4 w-100">
+            <div class="col-12">
+                <!-- Ayın Birincileri Section -->
+                <div class="top-scorers">
+                    <h2>Bu Ayın Derecesi</h2>
+        
+                    <!-- Last Month's Top Scorer -->
+                    <div class="scorer-card">
+                        <div class="rank">1</div>
+                        <div class="details">
+                            <h4>Amr Abdulhafez</h4>
+                            <p>Öğrenci No: 789012</p>
+                        </div>
+                        <div class="score">Skor: 1450</div>
+                    </div>
+                    <div class="scorer-card">
+                        <div class="rank">2</div>
+                        <div class="details">
+                            <h4>Hüseyin Abdulhanan El </h4>
+                            <p>Öğrenci No: 789012</p>
+                        </div>
+                        <div class="score">Skor: 1450</div>
+                    </div>
+                    <div class="scorer-card">
+                        <div class="rank">3</div>
+                        <div class="details">
+                            <h4>Sema Sadıç</h4>
+                            <p>Öğrenci No: 789012</p>
+                        </div>
+                        <div class="score">Skor: 1450</div>
+                    </div>
+                    <h2>Geçen Ayın Derecesi</h2>
+        
+                    <!-- Last Month's Top Scorer -->
+                    <div class="scorer-card">
+                        <div class="rank">1</div>
+                        <div class="details">
+                            <h4>Necdet Çevik</h4>
+                            <p>Öğrenci No: 789012</p>
+                        </div>
+                        <div class="score">Skor: 1450</div>
+                    </div>
+                    <div class="scorer-card">
+                        <div class="rank">2</div>
+                        <div class="details">
+                            <h4>Merve Bakmaz</h4>
+                            <p>Öğrenci No: 789012</p>
+                        </div>
+                        <div class="score">Skor: 1450</div>
+                    </div>
+                    <div class="scorer-card">
+                        <div class="rank">3</div>
+                        <div class="details">
+                            <h4>Burak Can</h4>
+                            <p>Öğrenci No: 789012</p>
+                        </div>
+                        <div class="score">Skor: 1450</div>
+                    </div>
+        
+                   
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Function to toggle sidebar visibility
+        function toggleSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var content = document.getElementById('content');
+            
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-250px'; // Hide sidebar
+                content.style.marginLeft = '0'; // Reset content margin
+            } else {
+                sidebar.style.left = '0'; // Show sidebar
+                content.style.marginLeft = '250px'; // Push content to the right
+            }
+        }
+    </script>
+</body>
+<footer class="bg-dark text-white py-4">
+  <div class="container">
+      <div class="row">
+          <!-- Hakkımızda Bölümü -->
+          <div class="col-md-4">
+              <h5>Hakkımızda</h5>
+              <p>
+                  Hasan Kalyoncu Üniversitesi, eğitimde mükemmelliği hedefleyen, yenilikçiliği teşvik eden ve daha parlak bir gelecek inşa eden bir üniversitedir.
+              </p>
+          </div>
+
+          <!-- Hızlı Erişim -->
+          <div class="col-md-4">
+              <h5>Hızlı Erişim</h5>
+              <ul class="list-unstyled">
+                  <li><a href="main.html" class="text-white text-decoration-none">Ana Sayfa</a></li>
+                  <li><a href="ilanlar.html" class="text-white text-decoration-none">İlanlar</a></li>
+                  <li><a href="topluluklar.html" class="text-white text-decoration-none">Topluluklar</a></li>
+                  <li><a href="blog.html" class="text-white text-decoration-none">Blog</a></li>
+                  <li><a href="istatistikler.html" class="text-white text-decoration-none">İstatistikler</a></li>
+              </ul>
+          </div>
+
+          <!-- Sosyal Medya -->
+          <div class="col-md-4 text-center">
+              <h5>Bizi Takip Edin</h5>
+              <a href="https://facebook.com" target="_blank" class="text-white mx-2">
+                  <i class="fab fa-facebook fa-lg"></i>
+              </a>
+              <a href="https://twitter.com" target="_blank" class="text-white mx-2">
+                  <i class="fab fa-twitter fa-lg"></i>
+              </a>
+              <a href="https://instagram.com" target="_blank" class="text-white mx-2">
+                  <i class="fab fa-instagram fa-lg"></i>
+              </a>
+              <a href="https://linkedin.com" target="_blank" class="text-white mx-2">
+                  <i class="fab fa-linkedin fa-lg"></i>
+              </a>
+          </div>
+      </div>
+
+      <hr class="bg-light my-3">
+      <div class="text-center">
+          <p class="mb-0">&copy; 2024 Hasan Kalyoncu Üniversitesi. Tüm hakları saklıdır.</p>
+      </div>
+  </div>
+</footer>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasan Kalyoncu Üniversitesi - Skorlar</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Sidebar style */
+        .sidebar {
+            height: 100vh;
+            width: 250px;
+            background-color: #cb0227;
+            position: fixed;
+            top: 0;
+            left: -250px; /* Hide sidebar initially */
+            transition: left 0.3s ease;
+        }
+
+        .sidebar a {
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+
+        .content {
+            transition: margin-left 0.3s ease;
+        }
+
+        .active {
+            left: 0 !important; /* Show sidebar when active */
+        }
+
+        .sidebar .profile-section {
+            padding: 15px;
+            background-color: #d32f2f;
+            text-align: center;
+        }
+
+        .sidebar .profile-section img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+        }
+
+        .sidebar .profile-section h5 {
+            margin-top: 10px;
+            color: white;
+        }
+
+        .sidebar .profile-section p {
+            color: white;
+            font-size: 14px;
+        }
+
+        .sidebar .logout-btn {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .sidebar .logout-btn a {
+            color: white;
+            background-color: #f44336;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: block;
+        }
+
+        .sidebar .logout-btn a:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <div class="profile-section">
+            <!-- Profile Picture -->
+            <img src="resimler/profile.png" alt="Profile Picture">
+            <h5>Hasan Kalyoncu</h5>
+        </div>
+        <a href="kişiselbilgiler.html">Kişisel Bilgiler</a>
+        <a href="üyelik.html">Üyelik</a>
+        
+        <!-- Score -->
+        <div class="p-3">
+            <a href="ayınBirinicis.html" class="text-white">Skor: 1500</a>
+        </div>
+
+        <!-- Log Out Button -->
+        <div class="logout-btn">
+            <a href="loginpage.html">Çıkış Yap</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content" id="content">
+        <div class="container-fluid">
+            <div class="row bg-danger text-white py-3">
+                <div class="col-md-6 d-flex align-items-center">
+                    <!-- Menu button to toggle the sidebar -->
+                    <button class="btn btn-outline-light me-3" onclick="toggleSidebar()">&#9776;</button>
+                    <input type="text" class="form-control" placeholder="Arama...">
+                </div>
+                <div class="col-md-6 text-end">
+                    <a href="main.html" class="text-white text-decoration-none mx-2">Ana Sayfa</a>
+                    <a href="ilanlar.html" class="text-white text-decoration-none mx-2">İlanlar</a>
+                    <a href="topluluklar.html" class="text-white text-decoration-none mx-2">Topluluklar</a>
+                    <a href="blog.html" class="text-white text-decoration-none mx-2">Blog</a>
+                    <a href="istatistikler.html" class="text-white text-decoration-none mx-2">İstatistikler</a>
+                    <a href="anketler.html" class="text-white text-decoration-none mx-2">Anketler</a>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="bg-white p-3 rounded shadow">
+                        <h2>Skorlar</h2>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Öğrenci No</th>
+                                    <th>Ad Soyad</th>
+                                    <th>Skor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Placeholder data, replace with dynamic content as needed -->
+                                <tr>
+                                    <td>123456</td>
+                                    <td>Ali Veli</td>
+                                    <td>1500</td>
+                                </tr>
+                                <tr>
+                                    <td>789012</td>
+                                    <td>Ayşe Fatma</td>
+                                    <td>1450</td>
+                                </tr>
+                                <tr>
+                                    <td>345678</td>
+                                    <td>Mehmet Can</td>
+                                    <td>1420</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Previous and Current Month Top Scorers Section -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="bg-light p-3 rounded shadow">
+                        <h2>Ayın Birincileri</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3>Geçen Ayın Birincisi</h3>
+                                <p>Öğrenci No: 789012</p>
+                                <p>Ad Soyad: Ayşe Fatma</p>
+                                <p>Skor: 1450</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h3>Bu Ayın Birincisi</h3>
+                                <p>Öğrenci No: 123456</p>
+                                <p>Ad Soyad: Ali Veli</p>
+                                <p>Skor: 1500</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Function to toggle sidebar visibility
+        function toggleSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var content = document.getElementById('content');
+            
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-250px'; // Hide sidebar
+                content.style.marginLeft = '0'; // Reset content margin
+            } else {
+                sidebar.style.left = '0'; // Show sidebar
+                content.style.marginLeft = '250px'; // Push content to the right
+            }
+        }
+    </script>
+</body>
+<footer class="bg-dark text-white py-4">
+    <div class="container">
+        <div class="row">
+            <!-- Hakkımızda Bölümü -->
+            <div class="col-md-4">
+                <h5>Hakkımızda</h5>
+                <p>
+                    Hasan Kalyoncu Üniversitesi, eğitimde mükemmelliği hedefleyen, yenilikçiliği teşvik eden ve daha parlak bir gelecek inşa eden bir üniversitedir.
+                </p>
+            </div>
+
+            <!-- Hızlı Erişim -->
+            <div class="col-md-4">
+                <h5>Hızlı Erişim</h5>
+                <ul class="list-unstyled">
+                    <li><a href="main.html" class="text-white text-decoration-none">Ana Sayfa</a></li>
+                    <li><a href="ilanlar.html" class="text-white text-decoration-none">İlanlar</a></li>
+                    <li><a href="topluluklar.html" class="text-white text-decoration-none">Topluluklar</a></li>
+                    <li><a href="blog.html" class="text-white text-decoration-none">Blog</a></li>
+                    <li><a href="istatistikler.html" class="text-white text-decoration-none">İstatistikler</a></li>
+                </ul>
+            </div>
+
+            <!-- Sosyal Medya -->
+            <div class="col-md-4 text-center">
+                <h5>Bizi Takip Edin</h5>
+                <a href="https://facebook.com" target="_blank" class="text-white mx-2">
+                    <i class="fab fa-facebook fa-lg"></i>
+                </a>
+                <a href="https://twitter.com" target="_blank" class="text-white mx-2">
+                    <i class="fab fa-twitter fa-lg"></i>
+                </a>
+                <a href="https://instagram.com" target="_blank" class="text-white mx-2">
+                    <i class="fab fa-instagram fa-lg"></i>
+                </a>
+                <a href="https://linkedin.com" target="_blank" class="text-white mx-2">
+                    <i class="fab fa-linkedin fa-lg"></i>
+                </a>
+            </div>
+        </div>
+
+        <hr class="bg-light my-3">
+        <div class="text-center">
+            <p class="mb-0">&copy; 2024 Hasan Kalyoncu Üniversitesi. Tüm hakları saklıdır.</p>
+        </div>
+    </div>
+</footer>
+</html>
